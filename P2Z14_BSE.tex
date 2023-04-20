@@ -1,0 +1,149 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{latexsym}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{graphicx}
+\usepackage{indentfirst}
+\usepackage[polish]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc} % tu mo�e by� konieczne zast�pienie "cp1250" przez np. "utf8"
+\usepackage{setspace}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{geometry}
+\geometry{hdivide={2cm,*,2cm}}
+\geometry{vdivide={2cm,*,2cm}}
+\usepackage{titlesec}
+\titlespacing{\section}{0ex}{1ex}{1ex} % zmniejszenie odst�p�w przed i po tytule rozdzia�u...
+\titleformat*{\section}{\sf\large\bfseries} % i zmiana kroju czcionki
+\titlespacing{\subsection}{0ex}{0.75ex}{0.75ex} % % j/w dla tytu��w podrozdzia��w
+\titleformat*{\subsection}{\sf\bfseries}
+
+% Zmniejszenie odst�p�w przed i za wzorami wystawionymi
+\AtBeginDocument{
+\addtolength{\abovedisplayskip}{-1ex}
+\addtolength{\abovedisplayshortskip}{-1ex}
+\addtolength{\belowdisplayskip}{-1ex}
+\addtolength{\belowdisplayshortskip}{-1ex}
+}
+% Kilka przydatnych definicji
+\newcolumntype{C}[1]{>{\centering\arraybackslash}m{#1}}
+\newcommand{\razy}{\hspace{-0.5ex}\times\hspace{-0.5ex}} % mo�e si� przyda�
+
+
+\begin{document}
+
+\def\tablename{Tabela} % bez tej linii nazw� tabeli by�aby "Tablica"
+
+
+\noindent
+\textbf{Bartosz Seweryn, 320733, grupa 5, projekt 2, zadanie 14}
+
+
+\section*{Wstęp}
+Obliczanie wartości całki na przedziale $[-1, 1]$ z wielomianu $p$, gdzie $p(x) = a_0T_0(x) + a_1T_1(x) + ... + a_nT_n(x)$ jest wielomianem danym w bazie złożonej z wielomianów Czebyszewa ($T_k$ to $k$-ty wielomian w bazie wielomianów Czebyszewa), $n$-punktową kwadraturą Gaussa-Legendre'a. Z przeprowadznonych eksperymentów numerycznych wynika, że $n$-punkowa kwadratura Gaussa-Legendre'a dokładnie oblicza wartość całki dla wielomianów stopnia mniejszego niż $2n$, natomiast dla wielomianów stopnia większego lub równego $2n$ błędy przybliżeń znacząco rosną. Okazuje się, że zdecydwoanie lepszą metodą jest obliczanie wartości całki wykorzystując własność wielomianów z bazy Czebyszewa, która zostanie przytoczona i udowodniona w dalszej części raportu.
+
+
+\section*{Opis metody obliczania całek kwadraturą Gaussa-Legendre'a}
+Niech 
+\[
+I(p) = \int_{-1}^{1}p(x)\,dx,
+\]
+gdzie $p(x) = a_0T_0(x) + a_1T_1(x) + ... + a_nT_n(x)$ jest wielomianem danym w bazie złożonej z wielomianów Czebyszewa. Wartość powyższej całki będziemy przybliżać za pomocą $n$-punktowej kwadratury Gaussa-Legendre'a postaci
+\[
+S(p) = \sum_{k = 1}^{n}A_kp(x_k),
+\]
+gdzie $A_i$ to $i$-ty współczynnik $n$-punktowej kwadratury Gaussa-Legendre'a, a $x_k$ to $k$-ty węzeł tej kwadratury.
+\section*{Eksperymenty numeryczne}
+Udowodnijmy następujący fakt
+\[
+\int_{-1}^{1}T_{k}(x)\,dx =
+\begin{cases}
+\frac{2}{1 - k^2} & \text{, gdy k jest parzyste,}\\
+0 & \text{, gdy k jest nieparzyste.}
+\end{cases}
+\]
+Dowód. Dla $x \in [-1, 1]$ $T_k(x) = \cos{(k\arccos{x})}$, rozważmy więc całkę
+\begin{equation} \label{eq:1}
+\int_{-1}^{1} \cos{(k\arccos{x})}\,dx.
+\end{equation}
+Niech 
+\begin{equation} \label{eq:2}
+t = \arccos{x},
+\end{equation}
+wówczas różniczkując stronami otrzymujemy 
+
+\begin{equation} \label{eq:3}
+dt = \frac{-dx}{\sqrt{1 - x^2}}.
+\end{equation}
+Z (\ref{eq:2}) wynika, że 
+\[
+\cos{t} = x.
+\]
+Czyli
+\begin{equation} \label{eq:4}
+x^2 = \cos^2{t}.
+\end{equation}
+Zatem po podstawieniu równania (\ref{eq:4}) do równania (\ref{eq:3})
+\[
+dt = \frac{-dx}{\sqrt{1 - \cos^2(t)}}.
+\]
+Dalej korzystając z jedynki trygonometrycznej i faktu, iż dla $x \in [-1, 1]$ $t$ musi należeć do przedziału $[0, \pi]$, co w konsekwencji oznacza, że $\sin{t} \geq{0}$, otrzymujemy
+\[
+dt = \frac{-dx}{\sin{t}},
+\]
+zatem
+\begin{equation} \label{eq:5}
+dx = -dt\sin{t}.
+\end{equation}
+Wykorzystując równanie (\ref{eq:5}), podstawienie (\ref{eq:2}) i odpowiednio zmieniając przedział całkowania dostajemy 
+\begin{equation} \label{eq:6}
+\int_{\pi}^{0} -\cos{(kt)}\sin{t}\,dt = \int_{0}^{\pi} \cos{(kt)}\sin{t}\,dt.
+\end{equation}
+Korzystając ze znanych tożsamości trygonometrycznych na sinusa sumy i różnicy kątów otrzymujemy wzór
+\begin{equation} \label{eq:7}
+\sin{\alpha}\cos{\beta} = \frac{1}{2}(\sin{(\alpha + \beta)} + \sin{(\alpha - \beta)}),
+\end{equation}
+który zostanie użyty do obliczenia całki (\ref{eq:1}).\\
+Po podstawieniu $\alpha = t$, $\beta = kt$ do wzoru (\ref{eq:7}), otrzymujemy 
+\[
+\int_{0}^{\pi} \cos{(kt)}\sin{t}\,dt = \int_{0}^{\pi} \frac{1}{2}(\sin{(t + kt)} + \sin{(t - kt)})\,dt,
+\]
+\[
+\int_{0}^{\pi} \frac{1}{2}(\sin{(t + kt)} + \sin{(t - kt)})\,dt = \frac{1}{2}(\int_{0}^{\pi} \sin{(t + kt)}\,dt +\int_{0}^{\pi} \sin{(t - kt)}\,dt).
+\]
+Stąd
+\[
+\int_{-1}^{1} \cos{(k\arccos{x})}\,dx = \frac{1}{2}\frac{-cos(\pi + k\pi) + cos(0)}{1 + k} + \frac{1}{2}\frac{-cos(\pi - k\pi) + cos(0)}{1 - k},
+\]
+Ostatecznie
+\[
+\int_{-1}^{1} \cos{(k\arccos{x})}\,dx = \frac{2 - (\cos{(\pi(1 + k))} + \cos{(\pi(1 - k))})}{2(1 - k^2)}
+\]
+Zauważmy, że dla $k = 2p$, gdzie $p \in \mathbb{Z}$
+\[
+\int_{-1}^{1} \cos{(2p\arccos{x})}\,dx = \frac{2 - (\cos{\pi(1 + 2p)} + \cos{\pi(1 - 2p)})}{2(1 - 4p^2)} = \frac{2 - (-2)}{2(1 - 4p^2)} = \frac{2}{1 - k^2}
+\]
+Natomiast dla $k = 2p + 1$
+\[
+\int_{-1}^{1} \cos{((2p + 1)\arccos{x})}\,dx = \frac{2 - (\cos{(\pi(2 + 2p))} + \cos{(\pi(-2p)}))}{2(1 - (2p + 1)^2)} = \frac{2 - 2}{2(1 - (2p + 1)^2)} = 0.
+\]
+\filright{\qed}
+
+Testy numeryczne potwierdziły, że dla wielomianów stopnia mniejszego, niż $2n$, gdzie $n$ jest liczbą punktów kwadratury, metoda obliczania całek kwadraturą Gaussa-Legendre'a jest dokładna.
+Niestety jeśli wielomian jest większego stopnia, dokładność znacząco spada. Wyniki testu numerycznego zawarte w poniższej tabeli potwierdzają, że nie można polegać na tej metodzie. Znacznie lepszym rozwiązaniem okazuje się policzenie wartości całki używając udowodnionego powyżej faktu. Wówasz wyniki są dokładne dla wielomianów dowolnego stopnia.
+\begin{table}[!h]\vspace*{-2ex}
+\caption{\footnotesize Wartość błędu $15$-punktowej kwadratury Gaussa-Legendre'a dla wielomianów o losowych współczynnikach podanych stopni.
+}\vspace{-1.5ex}
+\begin{center}
+\begin{tabular}{|l|l|l|l|l|l|}
+\hline
+Stopień wielomianu & $30$            & $31$            & $32$           & $33$            & $34$            \\ \hline
+Błąd               & $6.18\razy10^0$ & $1.55\razy10^0$ & $2.67\razy10^1$ & $2.89\razy10^0$ & $4.74\razy10^0$ \\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\end{document}

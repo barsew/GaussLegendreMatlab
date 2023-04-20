@@ -1,0 +1,8 @@
+1. test poprawności accurate_intergral
+2. test poprawności rzędu kwadratury z wykorzystaniem accurate_intergral
+3. test poprawności clenshawa
+
+4. num_tets dokładności wynkików dla wielomianów wyrzszych stopni niż rząd kwadratury
+
+RAPORT:
+- czy pisac cos o wsp i wezelach kwadratur?
